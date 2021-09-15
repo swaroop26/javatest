@@ -24,6 +24,10 @@ First clone the repository from: https://github.com/mwyatt-altx/javatest
 
 (Chances are you already have if you're reading this)
 
+If you have a GitHub account and want to fork the repository and push your changes to your own account
+that's a good solution. Otherwise you can zip up your local version and 
+email it back at the end. Please do not commit back to the original repo.
+
 The project contains a small RESTful web service to store and retrieve a
 catalogue in an in-memory H2 database. It should compile and run out of the box, and some test
 cases have already been provided. **Before continuing check that you can
@@ -138,5 +142,7 @@ to reflect the new functionality.
 
 ### Submission
 
-Once you are happy with your solution, please commit it back to the GitHub repository.
-If that doesn't work, please Zip up and email your solution back. 
+Once you are happy with your solution, please send it back, either as a link
+to a Git repo somewhere that we can access or in a Zipped email attachment.
+
+We'll review it and use it as the basis for discussion in a technical interview.
