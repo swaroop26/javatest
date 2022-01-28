@@ -1,7 +1,7 @@
-package com.altx.javatest;
+package com.altx.javatest.repo;
 
 import com.altx.javatest.data.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-interface MovieRepository extends JpaRepository<Movie, Long> {
+public interface MovieRepository extends JpaRepository<Movie, Long> {
 }

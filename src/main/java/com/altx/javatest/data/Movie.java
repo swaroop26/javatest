@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Database representation of a Movie
@@ -21,5 +20,6 @@ public class Movie {
     private @Id @GeneratedValue Long id;
     private String title;
     private Integer runningTimeMins;
-    private String stars;
+    @ManyToMany
+    private List<Actor> stars;
 }

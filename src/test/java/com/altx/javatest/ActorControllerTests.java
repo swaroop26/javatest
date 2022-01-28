@@ -1,11 +1,15 @@
 package com.altx.javatest;
 
-import com.altx.javatest.data.Movie;
+import com.altx.javatest.data.Actor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -17,52 +21,47 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class JavatestApplicationTests {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+class ActorControllerTests {
 
 	@Autowired
 	private MockMvc mockMvc;
 
 	@Test
+	@Order(1)
 	public void emptyDatabaseShouldReturnEmpty() throws Exception {
 
-		this.mockMvc.perform(get("/movies")).andDo(print()).andExpect(status().isOk())
+		this.mockMvc.perform(get("/actors")).andDo(print()).andExpect(status().isOk())
 				.andDo(print())
 				.andExpect(jsonPath("$").isArray())
 				.andExpect(jsonPath("$").isEmpty());
 	}
 
-	Long movieId = null;
-
 	@Test
-	public void addMovieIsSuccessful() throws Exception {
-
+	@Order(2)
+	public void addActorIsSuccessful() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
-		Movie mov = new Movie().setTitle("Top Gun").setRunningTimeMins(110).setStars("Tom Cruise, Kelly McGillis, Val Kilmer");
-		String jsonString = mapper.writeValueAsString(mov);
 
-		ResultActions postAction = this.mockMvc.perform(post("/movie")
+		Actor actor = new Actor().setId(1L).setFirstName("Tom").setLastName("Cruise");
+		ResultActions postAction = this.mockMvc.perform(post("/actor")
 				.contentType(org.springframework.http.MediaType.APPLICATION_JSON)
-				.content(jsonString));
-
+				.content(mapper.writeValueAsString(actor)));
 
 		postAction.andDo(print()).andExpect(status().isOk());
 		postAction.andExpect(jsonPath("$.id").isNumber())
-				.andExpect(jsonPath("$.title").value(mov.getTitle()))
-				.andExpect(jsonPath("$.runningTimeMins").value(mov.getRunningTimeMins()));
+				.andExpect(jsonPath("$.firstName").value(actor.getFirstName()))
+				.andExpect(jsonPath("$.lastName").value(actor.getLastName()));
 
-		postAction.andDo(res -> {
-			Movie m = mapper.readValue(res.getResponse().getContentAsString(), Movie.class);
-			movieId = m.getId();
-		});
 
-		this.mockMvc.perform(get("/movies")).andDo(print()).andExpect(status().isOk())
+		this.mockMvc.perform(get("/actors")).andDo(print()).andExpect(status().isOk())
 				.andDo(print())
 				.andExpect(jsonPath("$").isArray())
 				.andExpect(jsonPath("$").isNotEmpty());
 
-		this.mockMvc.perform(get("/movie/" + movieId)).andDo(print()).andExpect(status().isOk())
-				.andExpect(jsonPath("$.title").value(mov.getTitle()))
-				.andExpect(jsonPath("$.runningTimeMins").value(mov.getRunningTimeMins()));
+		this.mockMvc.perform(get("/actor/" + actor.getId())).andDo(print()).andExpect(status().isOk())
+				.andExpect(jsonPath("$.firstName").value(actor.getFirstName()))
+				.andExpect(jsonPath("$.lastName").value(actor.getLastName()));
 	}
 
 }
