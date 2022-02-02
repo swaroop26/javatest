@@ -26,6 +26,7 @@ public class MovieController {
         List<Actor> stars = movieModel.getStars().stream()
                 .map(id -> actorRepository.findById(id).orElseThrow(() -> new ActorNotFoundException(id)))
                 .collect(Collectors.toList());
+
         Movie movie = new Movie()
                 .setId(movieModel.getId())
                 .setRunningTimeMins(movieModel.getRunningTimeMins())
